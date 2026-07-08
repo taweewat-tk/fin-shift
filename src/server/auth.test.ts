@@ -15,8 +15,13 @@ describe('signToken / verifyToken', () => {
 
   it('rejects a tampered token', async () => {
     const token = await signToken({ sub: 'user-1', email: 'a@example.com' });
-    const tampered = token.slice(0, -1) + (token.at(-1) === 'a' ? 'b' : 'a');
-    await expect(verifyToken(tampered)).rejects.toThrow();
+    const [header, payload, signature] = token.split('.');
+    // Flip an interior character (not the last one, which can land on a
+    // base64url "don't-care" padding bit and silently decode identically).
+    const chars = payload.split('');
+    chars[2] = chars[2] === 'a' ? 'b' : 'a';
+    const tamperedPayload = chars.join('');
+    await expect(verifyToken(`${header}.${tamperedPayload}.${signature}`)).rejects.toThrow();
   });
 
   it('rejects a token signed with a different secret', async () => {

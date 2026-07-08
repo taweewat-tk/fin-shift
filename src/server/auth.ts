@@ -1,9 +1,11 @@
 import { jwtVerify, SignJWT } from 'jose';
 import type { NextRequest } from 'next/server';
 
+import { AUTH_COOKIE_NAME } from '@/shared/constants/cookies';
+
 import { db } from './db';
 
-export const AUTH_COOKIE_NAME = 'token';
+export { AUTH_COOKIE_NAME };
 const TOKEN_TTL = '7d';
 
 export interface AuthTokenPayload {
