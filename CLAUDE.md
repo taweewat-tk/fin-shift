@@ -2,9 +2,9 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Status: pre-code / greenfield
+## Status: Phase 0 scaffold complete
 
-There is **no source code yet**. The repository currently contains `PLAN.md` (the *what*) and `STRUCTURE.md` (the *how* — directory skeleton + module boundaries), and it is not yet a git repository. Both are **sources of truth** — read them in full before implementing anything. The sections below summarize their binding decisions; if this file disagrees with them, they win.
+The app is scaffolded: Next.js 16 + the full pinned dependency set, git hooks/lint/format toolchain, Docker Postgres (dev + `creditcard_test`), Prisma schema + migrations + seed, jose dual-transport auth with route handlers (register/login/logout/me), the TDD'd billing-cycle engine, and app providers/services skeleton. `.claude/plan/PLAN.md` (the *what*) and `.claude/plan/STRUCTURE.md`/`TESTING.md` (the *how*) remain **sources of truth** for anything not yet built (Phase 1+ feature UI: Cards/Expenses CRUD, dashboards, reminders, rewards). Read them before implementing anything new. `docs/adr/001-017.md` records the accepted decisions and every deviation discovered while building.
 
 **This project follows the conventions of the sibling app `../Korit/kor-it-ui`** (structure, tooling, naming) — read `STRUCTURE.md` (ADR-006…014). Key points:
 - **Full-stack Next.js with kor-it-ui's frontend org.** Backend = `src/server/*` (Prisma, jose — SERVER-ONLY, never imported by client) + REST/zod route handlers under `src/app/api/v1/*`. Frontend = `src/modules/<feature>/*` + `src/shared/services/api/*` (axios) calling our own `/api/v1`, via React Query hooks in `src/shared/hooks/api`.
@@ -40,4 +40,8 @@ Build **test-first**. Runner is **Vitest** (not Jest). Layered pyramid: **strict
 
 ## Commands
 
-None wired up yet. Once scaffolded via `create-next-app`, the expected scripts mirror `../Korit/kor-it-ui`'s naming but run on **Vitest**, not Jest (see `TESTING.md`, ADR-010): `npm run dev`, `npm run build`, `npm run lint` / `lint:fix`, `npm run type-check` (`tsc --noEmit`), `npm run test` / `test:watch` (Vitest), `npm run test:e2e` (Playwright), `npm run format`. Run a single test with `npm run test -- <path-or-name-pattern>`. **Update this section as soon as `package.json` exists.**
+`npm run dev` / `build` / `start`. `npm run lint` / `lint:fix` (ESLint 9.x flat config — see ADR-016 for why not 10), `npm run type-check` (`tsc --noEmit`), `npm run format` / `format:check`. `npm run test` (Vitest, all projects) / `test:watch` (primary TDD loop) / `test:coverage` / `test:e2e` (Playwright). Run a single test with `npm run test -- <path-or-name-pattern>` or `npx vitest run --project unit -t "<name>"`.
+
+Docker Postgres: `docker compose up -d` (runs `creditcard` + `creditcard_test`). `npx prisma migrate dev` (dev DB) / `npm run db:test:migrate` (test DB, via `.env.test`). `npx prisma db seed` seeds default categories.
+
+`husky` hooks are wired: pre-commit (lint-staged), commit-msg (commitlint), pre-push (the full gate). `npm run pre-push` runs the same checks manually.
