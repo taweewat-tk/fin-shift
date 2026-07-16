@@ -10,6 +10,7 @@ import { useLogout } from '@/shared/hooks/api/mutations/auth/useLogout';
 const NAV_LINKS = [
   { href: PAGE_ROUTES.DASHBOARD, label: 'Dashboard' },
   { href: PAGE_ROUTES.CARDS, label: 'Cards' },
+  { href: PAGE_ROUTES.EXPENSES, label: 'Expenses' },
 ];
 
 export default function AppNav() {

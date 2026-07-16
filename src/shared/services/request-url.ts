@@ -19,6 +19,16 @@ const REQUEST_URL = {
     UPDATE: (id: string) => `${basePrefix}/cards/${id}`,
     DELETE: (id: string) => `${basePrefix}/cards/${id}`,
   },
+  EXPENSES: {
+    LIST: `${basePrefix}/expenses`,
+    CREATE: `${basePrefix}/expenses`,
+    DETAIL: (id: string) => `${basePrefix}/expenses/${id}`,
+    UPDATE: (id: string) => `${basePrefix}/expenses/${id}`,
+    DELETE: (id: string) => `${basePrefix}/expenses/${id}`,
+  },
+  CATEGORIES: {
+    LIST: `${basePrefix}/categories`,
+  },
 };
 
 export default REQUEST_URL;
