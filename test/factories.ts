@@ -19,7 +19,9 @@ export async function makeUser(overrides: Partial<User> = {}): Promise<User> {
   });
 }
 
-export async function makeCard(userId: string, overrides: Partial<Card> = {}): Promise<Card> {
+type CardOverrides = Omit<Partial<Card>, 'creditLimit'> & { creditLimit?: number };
+
+export async function makeCard(userId: string, overrides: CardOverrides = {}): Promise<Card> {
   return testDb.card.create({
     data: {
       userId,
@@ -45,11 +47,13 @@ export async function makeCategory(overrides: Partial<Category> = {}): Promise<C
   });
 }
 
+type ExpenseOverrides = Omit<Partial<Expense>, 'amount'> & { amount?: number };
+
 export async function makeExpense(
   userId: string,
   cardId: string,
   categoryId: string,
-  overrides: Partial<Expense> = {}
+  overrides: ExpenseOverrides = {}
 ): Promise<Expense> {
   return testDb.expense.create({
     data: {
