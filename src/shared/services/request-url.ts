@@ -12,6 +12,13 @@ const REQUEST_URL = {
   ME: {
     GET: `${basePrefix}/me`,
   },
+  CARDS: {
+    LIST: `${basePrefix}/cards`,
+    CREATE: `${basePrefix}/cards`,
+    DETAIL: (id: string) => `${basePrefix}/cards/${id}`,
+    UPDATE: (id: string) => `${basePrefix}/cards/${id}`,
+    DELETE: (id: string) => `${basePrefix}/cards/${id}`,
+  },
 };
 
 export default REQUEST_URL;
